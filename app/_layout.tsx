@@ -6,7 +6,7 @@ import {theme} from "../theme";
 
 export default function Layout(){
   return (
-    <Tabs screenOptions={{tabBarActiveTintColor: theme.colorCerulean , headerShown: false}} >
+    <Tabs screenOptions={{tabBarActiveTintColor: theme.colorCerulean}} >
       <Tabs.Screen name="index" options={{
         title: "Shopping List",
         tabBarIcon: ({color,size})=>(
@@ -18,6 +18,7 @@ export default function Layout(){
         tabBarIcon: ({color,size})=>(
           <AntDesign name="clockcircleo" size={size} color={color} />
         ),
+        headerShown: false,
       }}/>
       <Tabs.Screen name="idea" options={{
         title: "Idea",
