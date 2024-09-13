@@ -1,5 +1,8 @@
 import {Alert, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {theme} from "../theme";
+import AntDesign from '@expo/vector-icons/AntDesign';
+import Entypo from "@expo/vector-icons/Entypo";
+
 
 type Props = {
     name: string,
@@ -25,13 +28,15 @@ export function ShoppingListItem({name, isCompleted }: Props) {
     };
     return (
         <View style={[styles.itemContainer, isCompleted ? styles.completedContainer : undefined]}>
-            <Text style={[styles.itemText, isCompleted && styles.completedText]}>{name}</Text>
+            <View style={styles.row}>
+                <Entypo name={isCompleted ? "check" : "circle"} size={24} color={isCompleted ? theme.colorGrey : theme.colorCerulean}/>
+                <Text style={[styles.itemText, isCompleted && styles.completedText]}>{name}</Text>
+            </View>
             <TouchableOpacity
-                style={[styles.button, isCompleted ? styles.completedButton : undefined]}
                 onPress={handleDelete}
                 activeOpacity={0.8}
             >
-                <Text style={styles.buttonText}>Delete</Text>
+                <AntDesign name="closecircle" size={24} color={isCompleted ? theme.colorGrey : theme.colorRed} />
             </TouchableOpacity>
         </View>
     );
@@ -40,7 +45,7 @@ export function ShoppingListItem({name, isCompleted }: Props) {
 const styles = StyleSheet.create({
     itemContainer: {
         paddingVertical: 16,
-        paddingHorizontal: 8,
+        paddingHorizontal: 18,
         borderBottomColor: theme.colorCerulean,
         borderBottomWidth: 1 ,
         flexDirection: 'row',
@@ -54,24 +59,18 @@ const styles = StyleSheet.create({
     itemText: {
         fontSize: 18,
         fontWeight: '200',
-    },
-    button: {
-        backgroundColor: theme.colorBlack,
-        padding: 8,
-        borderRadius: 6,
-    },
-    buttonText:{
-        color: theme.colorWhite,
-        fontWeight: 'bold',
-        textTransform: 'uppercase',
-        letterSpacing: 1,
+        marginLeft: 8,
+        flex: 1,
     },
     completedText: {
         textDecorationLine: 'line-through',
         textDecorationColor: theme.colorGrey,
         color: theme.colorGrey,
     },
-    completedButton: {
-        backgroundColor: theme.colorGrey,
-    }
+    row: {
+        flexDirection: "row",
+        flex: 1,
+        alignItems: "center",
+    },
+
 });
