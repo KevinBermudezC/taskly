@@ -1,8 +1,11 @@
 import {Animated, StyleSheet, TextInput, View,Text} from 'react-native';
 import {theme} from "../theme";
 import {ShoppingListItem} from "../components/ShoppingListItem";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import FlatList = Animated.FlatList;
+import {getFromStorage, saveToStorage} from "../utils/storage";
+
+const storageKey = "shopping-List";
 
 type ShoppingListItemType = {
   id: string;
@@ -11,9 +14,19 @@ type ShoppingListItemType = {
   lastUpdatedTimestamp: number;
 };
 
-export default function Index() {
+export default function App() {
   const [shoppingList, setShoppingList] = useState<ShoppingListItemType[]>([]);
   const [value, setValue] = useState("");
+
+  useEffect(() => {
+    const fetchInitial = async () => {
+      const data = await getFromStorage(storageKey);
+      if(data){
+        setShoppingList(data);
+      }
+    };
+    fetchInitial();
+  }, []);
 
   const handleSubmit = () => {
     if(value){
@@ -26,12 +39,14 @@ export default function Index() {
         ...shoppingList,
       ];
       setShoppingList(newShoppingList);
+      saveToStorage(storageKey, shoppingList);
       setValue("");
     }
   };
 
   const handleDelete = (id:String)=>{
     const newShoppingList = shoppingList.filter(item => item.id !== id);
+    saveToStorage(storageKey, shoppingList);
     setShoppingList(newShoppingList);
   };
 
@@ -48,6 +63,7 @@ export default function Index() {
       }
       return item;
     })
+    saveToStorage(storageKey, newShoppingList);
     setShoppingList(newShoppingList);
   }
 
@@ -77,6 +93,7 @@ export default function Index() {
     />
   );
 }
+
 function orderShoppingList(shoppingList: ShoppingListItemType[]) {
   return shoppingList.sort((item1, item2) => {
     if (item1.completedAtTimestamp && item2.completedAtTimestamp) {
